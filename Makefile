@@ -1,7 +1,9 @@
 CXX = g++
 LIB = ./src/build/cppnet.a
+MFLAGS = -f ./src/Makefile --no-print-directory
+SRC = $(wildcard src/*/*.cpp)
 
-demo: demo.cpp ${LIB}
+demo: demo.cpp ${LIB} ${SRC}
 	cd src && make && cd ..
 	${CXX} -o demo demo.cpp ${LIB}
 

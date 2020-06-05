@@ -13,6 +13,7 @@ Header::~Header() {  }
 
 std::ostream& operator<<(std::ostream& os, const Header& add) {
     add.print(os);
+
     return os;
 }
 

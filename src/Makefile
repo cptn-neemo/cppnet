@@ -1,16 +1,18 @@
-BDIR = ./build
+CC = g++
+LIB = ./build/cppnet.a
 
+SRC = $(wildcard ./*/*.cpp)
+OBJS = $(patsubst %.cpp, %.o, $(SRC))
 
-lib: Packet.o Header.o Factory.o cppnet.h
-	ar rvs ${BDIR}/cppnet.a ${BDIR}/Header.o
-	ar rvs ${BDIR}/cppnet.a ${BDIR}/Packet.o
-	ar rvs ${BDIR}/cppnet.a ${BDIR}/Factory.o
+# main : $(OBJS) $(CPP_FILES) dog
+#	@echo $(CPP_FILES)
+#	@echo $(OBJS)
 
-Packet.o: Packet.h Packet.cpp
-	${CXX} -o ${BDIR}/Packet.o -c Packet.cpp
+lib: $(OBJS)
 
-Header.o: Header.h Header.cpp
-	${CXX} -o ${BDIR}/Header.o -c Header.cpp
+%.o: %.cpp
+	$(CC) -o $@ -c $^
+	ar rvs $(LIB) $@
 
-Factory.o: Factory.h Factory.cpp
-	${CXX} -o ${BDIR}/Factory.o -c Factory.cpp
+clean:
+	@rm -f */*.o
