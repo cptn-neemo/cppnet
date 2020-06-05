@@ -1,0 +1,16 @@
+BDIR = ./build
+
+
+lib: Packet.o Header.o Factory.o cppnet.h
+	ar rvs ${BDIR}/cppnet.a ${BDIR}/Header.o
+	ar rvs ${BDIR}/cppnet.a ${BDIR}/Packet.o
+	ar rvs ${BDIR}/cppnet.a ${BDIR}/Factory.o
+
+Packet.o: Packet.h Packet.cpp
+	${CXX} -o ${BDIR}/Packet.o -c Packet.cpp
+
+Header.o: Header.h Header.cpp
+	${CXX} -o ${BDIR}/Header.o -c Header.cpp
+
+Factory.o: Factory.h Factory.cpp
+	${CXX} -o ${BDIR}/Factory.o -c Factory.cpp

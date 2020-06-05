@@ -1,5 +1,5 @@
 #include <iostream>
-#include "cppnet.h"
+#include "./src/cppnet.h"
 
 struct Data {
     int dog{12};

@@ -1,13 +1,9 @@
 CXX = g++
+LIB = ./src/build/cppnet.a
 
-demo: demo.cpp Packet.o Header.o cppnet.h
-	${CXX} -o demo demo.cpp Packet.o Header.o 
+demo: demo.cpp ${LIB}
+	cd src && make && cd ..
+	${CXX} -o demo demo.cpp ${LIB}
 
-Packet.o: Packet.h Packet.cpp
-	${CXX} -c Packet.h Packet.cpp
-
-Header.o: Header.h Header.cpp
-	${CXX} -c Header.h Header.cpp
-clean:
-	-rm -f *.o
+clean: demo
 	-rm demo
