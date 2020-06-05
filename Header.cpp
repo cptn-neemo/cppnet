@@ -16,7 +16,6 @@ std::ostream& operator<<(std::ostream& os, const Header& add) {
     return os;
 }
 
-
 // ---------------- EthHeader Implementations ---------------
 
 EthHeader::~EthHeader() {
@@ -29,6 +28,8 @@ EthHeader& EthHeader::operator=(EthHeader&& rhs) {
 
     rhs.src = "";
     rhs.dst = "";
+
+    return *this;
 }
 
 std::string EthHeader::getName() {

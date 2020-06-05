@@ -7,11 +7,18 @@ struct Data {
 };
 
 int main() {
-    auto iphdr = std::make_shared<IPv4Header>("192.168.1.1", "255.255.255.255", 64);
-    auto ethhdr = std::make_shared<EthHeader>();
+    // Use of the template factory function
+    auto iphdr = createHeader<IPv4Header, std::string, std::string, unsigned int>(
+        "192.168.1.1",
+        "255.255.255.255",
+        64
+    );
+
+    // Use of the specific eth function
+    auto ethhdr = createEthHeader("AB:CD:EF:00:11:22");
 
     auto data = std::make_shared<Data>();
-    auto payload = CreatePayload<Data>(data);
+    auto payload = createPayload<Data>(data);
 
     Packet p{  };
     p.add_header(iphdr);
@@ -20,13 +27,8 @@ int main() {
     std::cout << p; 
 
     std::shared_ptr<Header> data_h = p.get_header(HeaderType::Payload);
-    //dynamic_cast<std::shared_ptr<Payload<Data>>>(data_h);
-    //reinterpret_cast<std::shared_ptr<Payload<Data>>>(data_h);
 
     auto data_header = std::dynamic_pointer_cast<Payload<Data>>(data_h);
 
     std::cout << data_header->payload->dog << std::endl;
-    //auto data_g = dynamic_cast<Payload<Data>>(*p.get_header(HeaderType::Payload));
-
-
 }
