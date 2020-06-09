@@ -5,12 +5,15 @@
 #include "Router.h"
 #include "Event.h"
 #include "Interface.h"
+#include "Network.h"
 
 #ifndef __test_scenario_h
 #define __test_scenario_h
 
 class TestScenario {
     public:
+        TestScenario() : events{}, interfaces{}, net(&events, &interfaces) {  }
+
         /**
          * Create a new test scenario given a router/switch
          *
@@ -32,9 +35,17 @@ class TestScenario {
             std::string ipaddr
         );
 
+        void addInterface(Interface intf);
+
+        /**
+         * Run the test scenario on the given router
+         */
+        void run(Router& r);
+
     private:
-         std::vector<Event> events;
-         std::vector<Interface> interfaces;
+        std::vector<Event> events;
+        std::vector<Interface> interfaces;
+        Network net;
 };
 
 #endif

@@ -1,10 +1,12 @@
-#include "Event.h"
-
 #ifndef __router_h
 #define __router_h
 
+#include "Event.h"
+#include "Network.h"
+
 class Router {
-    virtual void main() const = delete;
+    public:
+        virtual void main(Network &net) = 0;
 };
 
 #endif

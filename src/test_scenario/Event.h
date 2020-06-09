@@ -6,7 +6,6 @@
 
 struct Event {
     Event(Packet pkt, Interface intf) : pkt(pkt), intf(intf) {  }
-
     Packet pkt; 
     Interface intf;
 };

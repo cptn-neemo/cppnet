@@ -1,3 +1,8 @@
 #include "./packet/Packet.h"
 #include "./packet/Header.h"
 #include "./packet/Factory.h"
+#include "./test_scenario/TestScenario.h"
+#include "./test_scenario/Network.h"
+#include "./test_scenario/Router.h"
+#include "./test_scenario/Event.h"
+#include "./test_scenario/Interface.h"
