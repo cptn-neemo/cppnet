@@ -28,6 +28,12 @@ class Packet {
          */
         void add_header(std::shared_ptr<Header> h);
 
+        /**
+         * Get the header of type ht
+         *
+         * @param ht type of header to get
+         * @return a pointer to the header of type ht
+         */
         std::shared_ptr<Header> get_header(HeaderType ht);
 
     private:

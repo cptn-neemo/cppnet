@@ -1,34 +1,63 @@
-#include <iostream>
 #include "./src/cppnet.h"
 
-struct Data {
-    int dog{12};
-    int cat{15};
+Packet createPacket(
+    std::string ipsrc,
+    std::string ipdst,
+    unsigned int ttl,
+    std::string hwsrc,
+    std::string hwdst
+    ) {
+    
+    Packet pkt;
+    auto iphdr = createIPv4Header(ipsrc, ipdst, ttl);
+    auto hwhdr = createEthHeader(hwsrc, hwdst);
+    pkt.add_header(hwhdr);
+    pkt.add_header(iphdr);
+
+    return pkt;
+}
+
+class BroadcastSwitch : public Router {
+    public:
+        void main(Network& net) override {
+            std::cout << "Main called" << std::endl;
+            Event event = net.recvPacket();
+
+            std::cout << event.pkt << std::endl;
+
+            // Broadcast the packet out of every port except the incoming port
+            for (const Interface& intf : net.ports()) {
+                if (intf != event.intf) {
+                    net.sendPacket(intf.name, event.pkt);
+                }
+            }
+        }
 };
 
-int main() {
-    // Use of the template factory function
-    auto iphdr = createHeader<IPv4Header, std::string, std::string, unsigned int>(
-        "192.168.1.1",
-        "255.255.255.255",
-        64
+int main() { 
+    TestScenario ts;
+
+    Interface eth0("eth0", "00:00:00:00:00:00", "127.0.0.0");
+    Interface eth1("eth1", "00:00:00:00:00:10", "127.0.0.1");
+    Interface eth2("eth2", "00:00:00:00:00:20", "127.0.0.2");
+
+    Packet pkt = createPacket(
+        "192.1.1.1",
+        "192.1.2.3",
+        64,
+        "00:00:00:00:00:01",
+        "00:00:00:00:00:02"
     );
 
-    // Use of the specific eth function
-    auto ethhdr = createEthHeader("AB:CD:EF:00:11:22");
+    ts.addInterface(eth0);
+    ts.addInterface(eth1);
+    ts.addInterface(eth2);
 
-    auto data = std::make_shared<Data>();
-    auto payload = createPayload<Data>(data);
+    ts.addEvent(Event(pkt, eth0));
 
-    Packet p{  };
-    p.add_header(iphdr);
-    p.add_header(ethhdr);
-    p.add_header(payload);
-    std::cout << p; 
+    BroadcastSwitch r{};
 
-    std::shared_ptr<Header> data_h = p.get_header(HeaderType::Payload);
+    ts.run(r);
 
-    auto data_header = std::dynamic_pointer_cast<Payload<Data>>(data_h);
-
-    std::cout << data_header->payload->dog << std::endl;
+    return 0;
 }

@@ -118,8 +118,16 @@ struct IPv4Header : public Header {
     unsigned int ttl;
 };
 
+/**
+ * Payload header. Contains information on an abstract type T
+ */
 template <typename T>
 struct Payload : public Header { 
+    /**
+     * Create a new payload header with a pointer to data of type T
+     *
+     * @param payload pointer to the payload of the packet
+     */
     Payload(std::shared_ptr<T> payload) 
         : Header(HeaderType::Payload), payload(payload), length(sizeof(T)){  }
 
